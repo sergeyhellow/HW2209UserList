@@ -3,16 +3,21 @@ import { useState, useEffect } from "react";
 
 
 
-export default function UsersTable({ users }) {
-  const [userList, setUserList] = useState(users);
+export default function UsersTable( {users}) {
+    console.log(users);
+    const 
+      [userList, setUserList] = useState(users),
+      removeUser = (userId) => {
+            const updatedUserList = userList.filter((user) => user.id !== userId);
+        setUserList(updatedUserList);
+      };
+     
+    useEffect(() => {
+        // При изменении users обновляем userList
+        setUserList(users);
+      }, [users]); // Зависимость useEffect от users
+    
  
-
-  const handleRemoveUser = (userId) => {
-    // Удалить пользователя из списка
-    const updatedUserList = userList.filter((user) => user.id !== userId);
-    setUserList(updatedUserList);
-  };
-
   return (
     <div>
       <table className={style.table}>
@@ -37,7 +42,7 @@ export default function UsersTable({ users }) {
               <td>{user.website}</td>
               <td>{user.companyName}</td>
               <td>
-                <button onClick={() => handleRemoveUser(user.id)}>Delete</button>
+                <button onClick={() => removeUser(user.id)}>Delete</button>
               </td>
             </tr>
           ))}
