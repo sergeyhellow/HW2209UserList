@@ -5,7 +5,8 @@ import style from "./Header.module.css"
 const
     pages =[
         {href:'/', title:'Home'},
-        {href:'/users', title: 'Users' }
+        {href:'/users', title: 'Users' },
+        {href:'/calendar', title: 'Calendare' }
     ];
 
 
