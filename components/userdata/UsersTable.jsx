@@ -12,18 +12,33 @@ export default function UsersTable( {users}) {
         setUserList(updatedUserList);
       };
      
+      const sortByName = () => {
+        const sortedUsers = [...userList];
+        sortedUsers.sort((user1, user2) => {
+          const name1 = user1.name.toLowerCase();
+          const name2 = user2.name.toLowerCase();
+          if (name1 < name2) return -1;
+          if (name1 > name2) return 1;
+          return 0;
+        });
+        setUserList(sortedUsers);
+      };
+
+
     useEffect(() => {
-        // При изменении users обновляем userList
+        //  изменении users обновляем userList
         setUserList(users);
+        //sortByName ();
       }, [users]); // Зависимость useEffect от users
     
- 
+     
+
   return (
     <div>
       <table className={style.table}>
         <thead>
           <tr>
-            <th>Name</th>
+            <th ><label onClick={sortByName}>Name <br/>(click for sort)</label></th>
             <th>Username</th>
             <th>City</th>
             <th>Phone</th>
@@ -51,6 +66,8 @@ export default function UsersTable( {users}) {
 
     </div>
   );
+
+  
 }
 
 
