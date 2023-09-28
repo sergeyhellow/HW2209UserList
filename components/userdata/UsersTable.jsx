@@ -60,7 +60,7 @@ export default function UsersTable( {users}) {
               <td>{user.website}</td>
               <td>{user.company.name}</td>
               <td>
-                <button onClick={() => removeUser(user.id)}>Delete</button>
+                <label onClick={() => removeUser(user.id)}>✂️ Delete ✂️</label>
               </td>
             </tr>
           ))}
