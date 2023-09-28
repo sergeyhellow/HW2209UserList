@@ -4,27 +4,30 @@ import { useState, useEffect } from "react";
 
 
 export default function UsersTable( {users}) {
+    
     console.log(users);
     const 
+      [backSort, setBackSort] =  useState(false),
       [userList, setUserList] = useState(users),
       removeUser = (userId) => {
             const updatedUserList = userList.filter((user) => user.id !== userId);
         setUserList(updatedUserList);
       };
      
-      const sortByName = () => {
+      const sortBy = (prop) => {
         const sortedUsers = [...userList];
-        sortedUsers.sort((user1, user2) => {
-          const name1 = user1.name.toLowerCase();
-          const name2 = user2.name.toLowerCase();
-          if (name1 < name2) return -1;
-          if (name1 > name2) return 1;
-          return 0;
-        });
+        if(backSort){
+        sortedUsers.sort(compareValues(prop));
+        setBackSort(false);
+        }
+        if(!backSort){
+          sortedUsers.sort(compareValues(prop,'desc'));
+          setBackSort(true);
+          }
         setUserList(sortedUsers);
-      };
+      }
 
-
+         
     useEffect(() => {
         //  изменении users обновляем userList
         setUserList(users);
@@ -38,11 +41,11 @@ export default function UsersTable( {users}) {
       <table className={style.table}>
         <thead>
           <tr>
-            <th ><label onClick={sortByName}>Name <br/>(click for sort)</label></th>
-            <th>Username</th>
+            <th ><label onClick={()=>{sortBy('name')}}>Name <br/>(click for sort)</label></th>
+            <th><label onClick={()=>{sortBy('username')}}>Username <br/>(click for sort)</label></th>
             <th>City</th>
             <th>Phone</th>
-            <th>Website</th>
+            <th><label onClick={()=>{sortBy('website')}}>Website <br/>(click for sort)</label></th>
             <th>Company Name</th>
             <th>Actions</th>
           </tr>
@@ -52,66 +55,50 @@ export default function UsersTable( {users}) {
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.username}</td>
-              <td>{user.city}</td>
+              <td>{user.address.city}</td>
               <td>{user.phone}</td>
               <td>{user.website}</td>
-              <td>{user.companyName}</td>
+              <td>{user.company.name}</td>
               <td>
                 <button onClick={() => removeUser(user.id)}>Delete</button>
               </td>
             </tr>
           ))}
-        </tbody>
+         </tbody>
+
       </table>
 
     </div>
   );
 
-  
+  }
+
+
+// функция динамической сортировки , честно стащил из сети
+function compareValues(key, order='asc') {
+  return function(a, b) {
+    if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      
+        return 0; 
+    }
+
+    const varA = (typeof a[key] === 'string') ? 
+      a[key].toUpperCase() : a[key];
+    const varB = (typeof b[key] === 'string') ? 
+      b[key].toUpperCase() : b[key];
+
+    let comparison = 0;
+    if (varA > varB) {
+      comparison = 1;
+    } else if (varA < varB) {
+      comparison = -1;
+    }
+    return (
+      (order == 'desc') ? (comparison * -1) : comparison
+    );
+  };
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-// export default function UsersTable ({users}) {
-     
-//        return (
-//         <table className={style.table}>
-//         <thead>
-//           <tr>
-//             <th>Name</th>
-//             <th>Username</th>
-//             <th>City</th>
-//             <th>Phone</th>
-//             <th>Website</th>
-//             <th>Name</th>
-
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {users.map((user) => (
-//             <tr key={user.id}>
-//               <td>{user.name}</td>
-//               <td>{user.username}</td>
-//               <td>{user.address.city}</td>
-//               <td>{user.phone}</td>
-//               <td>{user.website}</td>
-//               <td>{user.company.name}</td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table> 
-
-//      )}
 
 
 
