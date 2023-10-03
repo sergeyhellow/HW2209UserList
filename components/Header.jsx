@@ -6,7 +6,8 @@ const
     pages =[
         {href:'/', title:'Home'},
         {href:'/users', title: 'Users' },
-        {href:'/calendar', title: 'Calendare' }
+        {href:'/calendar', title: 'Calendare' },
+        {href:'/omdb', title: 'Movies' }
     ];
 
 
