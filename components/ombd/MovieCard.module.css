@@ -1,117 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
-
-body {
-  /* solid background */
-  background: rgb(0,212,255);
-  
-  /* gradient background*/
-  background: linear-gradient(45deg, rgba(0,212,255,1) 0%, rgba(11,3,45,1) 100%);    
-  
-  /* photo background */
-  background-image: url(https://images.unsplash.com/photo-1619204715997-1367fe5812f1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1889&q=80);
-  background-size: cover;
-  background-position: center;  
-  
+.product_container {
   display: flex;
-  align-items: center;
-  justify-content: center;    
-  height: 100vh;  
+  flex-wrap: wrap;
+  justify-content: space-between; 
+  gap: 16px; 
+  margin: 0 auto; 
+  padding: 16px; 
 }
 
-.container {
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(17, 25, 40, 0.25);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.125);  
-  padding: 38px;  
-  filter: drop-shadow(0 30px 10px rgba(0,0,0,0.125));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content:center;
+.product_card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
   text-align: center;
-  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 300px; /* Ширина карточки */
 }
 
-.wrapper {
-  width: 100%;
-  height: 100%;
-  
+.product_image {
+  max-width: 100%;
+  height: auto;
 }
 
-.banner_image {
-  background-image: url(https://images.unsplash.com/photo-1641326201918-3cafc641038e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80);
-  background-position: center;
-  background-size: cover;
-  height: 300px;
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255, 0.255)
+.product_title {
+  font-size: 1.25rem;
+  margin-top: 0;
 }
 
-h1{
-  font-family: 'Righteous', sans-serif;
-  color: rgba(255,255,255,0.98);
-  text-transform: uppercase;
-  font-size: 2.4rem;
+.product_description {
+  font-size: 0.875rem;
+  color: #777;
 }
 
-p {
-  color: #fff;
-  font-family: 'Lato', sans-serif;
-  text-align: center;
-  font-size: 0.8rem;
-  line-height: 150%;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.button_wrapper{
-  margin-top: 18px;
-}
-
-.btn {
-  border: none;
-  padding: 12px 24px;
-  border-radius: 24px;
-  font-size: 12px;
-  font-size: 0.8rem;  
-  letter-spacing: 2px;  
-  cursor: pointer;
-}
-
-.btn + .btn {
-  margin-left: 10px;
-}
-
-.outline {
-  background: transparent;
-  color: rgba(0, 212, 255, 0.9);
-  border: 1px solid rgba(0, 212, 255, 0.6);
-  transition: all .3s ease;
-  
-}
-
-.outline:hover{
-  transform: scale(1.125);
-  color: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.9);
-  transition: all .3s ease;  
-}
-
-.fill {
-  background: rgba(0, 212, 255, 0.9);
-  color: rgba(255,255,255,0.95);
-  filter: drop-shadow(0);
+.product_price {
+  font-size: 1.25rem;
   font-weight: bold;
-  transition: all .3s ease; 
+  color: #333;
+  margin-top: 8px;
 }
 
-.fill:hover{
-  transform: scale(1.125);  
-  border-color: rgba(255, 255, 255, 0.9);
-  filter: drop-shadow(0 10px 5px rgba(0,0,0,0.125));
-  transition: all .3s ease;    
+.custom_input {
+  width: 1000px; /* Устанавливаем ширину 100% от родительского контейнера */
+  padding: 10px 15px; /* Добавляем отступы, чтобы текст не прилипал к краям input */
+  font-size: 16px; /* Задаем размер шрифта */
 }
