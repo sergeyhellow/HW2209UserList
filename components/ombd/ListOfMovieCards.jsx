@@ -8,11 +8,11 @@ import MovieCard from "./MovieCard";
        
         if (movies && movies.Search && Array.isArray(movies.Search)) {
           return (
-            <div>
+            <>
               {movies.Search.map((movie) => (
                 <MovieCard key={movie.imdbID} movie={movie} />
               ))}
-            </div>
+            </>
           );
         } 
 
