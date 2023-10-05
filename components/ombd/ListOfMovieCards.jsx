@@ -1,5 +1,5 @@
 
-
+import style from "./MovieCard.module.css"
 
 import MovieCard from "./MovieCard";
 
@@ -8,7 +8,7 @@ import MovieCard from "./MovieCard";
        
         if (movies && movies.Search && Array.isArray(movies.Search)) {
           return (
-            <div>
+            <div  className={style.product_container}>
               {movies.Search.map((movie) => (
                 <MovieCard key={movie.imdbID} movie={movie} />
               ))}
