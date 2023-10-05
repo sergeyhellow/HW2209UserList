@@ -15,6 +15,7 @@ import MovieCard from "./MovieCard";
             </div>
           );
         } 
+      
 
         else if( movies && movies.Response === "False") {
             return <div>{movies.Error} </div>; 
