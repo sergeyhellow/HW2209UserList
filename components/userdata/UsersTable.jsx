@@ -1,80 +1,106 @@
-import style from './UserTable.module.css'
-import { useState, useEffect } from "react";
+import style from './UserTable.module.css';
+import { useState } from "react";
+import useSWR from 'swr';
+import toast from 'react-hot-toast';
 
+async function fetcher(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Ошибка при загрузке данных');
+  }
+  return response.json();
+}
 
+export default function UsersTable() {
+  let API_URL = 'http://localhost:3333/users';
 
-export default function UsersTable( {users}) {
+  const
+    [backSort, setBackSort] = useState(false),
+    { data: userList=[], error,isLoading, isValidating, mutate } = useSWR(API_URL, fetcher),
+    removeUser = (userId) => {
+      const updatedUserList = userList.filter((user) => user.id !== userId);
     
-    console.log(users);
-    const 
-      [backSort, setBackSort] =  useState(false),
-      [userList, setUserList] = useState(users),
-      removeUser = (userId) => {
-            const updatedUserList = userList.filter((user) => user.id !== userId);
-        setUserList(updatedUserList);
-      };
-     
+      mutate(updatedUserList);
+    };
+
+
+    
+      console.log('isLoading:', isLoading);
+      console.log('error:', error);
+      console.log('userList:', userList);
+      console.log('isValidating:', isValidating);
+
       const sortBy = (prop) => {
         const sortedUsers = [...userList];
-        if(backSort){
-        sortedUsers.sort(compareValues(prop));
-        setBackSort(false);
+        if (backSort) {
+          sortedUsers.sort(compareValues(prop));
+          setBackSort(false);
         }
-        if(!backSort){
-          sortedUsers.sort(compareValues(prop,'desc'));
+        if (!backSort) {
+          sortedUsers.sort(compareValues(prop, 'desc'));
           setBackSort(true);
-          }
-        setUserList(sortedUsers);
-      }
-
-         
-    useEffect(() => {
-        //  изменении users обновляем userList
-        setUserList(users);
-        //sortByName ();
-      }, [users]); // Зависимость useEffect от users
-    
-     
+        }
+        mutate(sortedUsers, false);
+        console.log('MatateUserList:', userList);
+      };
 
   return (
-    <div>
-      <table className={style.table}>
-        <thead>
-          <tr>
-            <th ><label onClick={()=>{sortBy('name')}}>Name <br/>(click for sort)</label></th>
-            <th><label onClick={()=>{sortBy('username')}}>Username <br/>(click for sort)</label></th>
-            <th>City</th>
-            <th>Phone</th>
-            <th><label onClick={()=>{sortBy('website')}}>Website <br/>(click for sort)</label></th>
-            <th>Company Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userList.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.username}</td>
-              <td>{user.address.city}</td>
-              <td>{user.phone}</td>
-              <td>{user.website}</td>
-              <td>{user.company.name}</td>
-              <td>
-                <label onClick={() => removeUser(user.id)}>✂️ Delete ✂️</label>
-              </td>
+    <>
+      <div>
+        <table className={style.table}>
+          <thead>
+            <tr>
+              <th ><label onClick={() => { sortBy('name') }}>Name <br />(click for sort)</label></th>
+              <th><label onClick={() => { sortBy('username') }}>Username <br />(click for sort)</label></th>
+              <th>City</th>
+              <th>Phone</th>
+              <th><label onClick={() => { sortBy('website') }}>Website <br />(click for sort)</label></th>
+              <th>Company Name</th>
+              <th>Actions</th>
             </tr>
-          ))}
-         </tbody>
+          </thead>
+          <tbody>
 
-      </table>
+          {isLoading ? (
+              <tr>
+                <td colSpan="7">Загрузка данных...</td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan="7">Ошибка при загрузке данных</td>
+              </tr>
+            ) : userList && userList.length > 0 ? (
+              userList.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.username}</td>
+                  <td>{user.address?.city}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.website}</td>
+                  <td>{user.company?.name}</td>
+                  <td>
+                    <label onClick={() => removeUser(user.id)}>✂️ Delete ✂️</label>
+                    <label>✂️ Edit ✂️</label>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7">Нет данных для отображения</td>
+              </tr>
+            )}
 
-    </div>
+
+          </tbody>
+        </table>
+      </div>
+    </>
   );
+}
 
-  }
 
 
-// функция динамической сортировки , честно стащил из сети
+// функция динамической сортировки , 
 function compareValues(key, order='asc') {
   return function(a, b) {
     if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
