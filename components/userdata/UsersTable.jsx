@@ -1,7 +1,8 @@
 import style from './UserTable.module.css';
-import { useState } from "react";
+import { useState,  useEffect} from "react";
 import useSWR from 'swr';
 import toast from 'react-hot-toast';
+
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -16,19 +17,50 @@ export default function UsersTable() {
 
   const
     [backSort, setBackSort] = useState(false),
-    { data: userList=[], error,isLoading, isValidating, mutate } = useSWR(API_URL, fetcher),
-    removeUser = (userId) => {
-      const updatedUserList = userList.filter((user) => user.id !== userId);
-    
-      mutate(updatedUserList);
-    };
+    { data: userList, error,isLoading,  mutate } = useSWR(API_URL, fetcher);
 
+   // async function removeUser  (userId) {
+    //  const updatedUserList = userList.filter((user) => user.id !== userId);
+      
+    //  mutate(updatedUserList);
+  //  };
+             
+
+     async function removeUser(id) {
+     
+      const 
+          updatedUserList = userList.filter((user) => user.id !== id);
+          
+          mutate(updatedUserList);
+          const response=await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    
+      if (response.ok) {
+         await toast.success('Успешно удалено');
+        
+    
+       mutate(updatedUserList); // Обновление данных с оптимистической оптимизацией
+       } else {
+         await toast.error('Ошибка при удалении ' + id);
+        }
+     }
+
+
+
+
+
+
+    const editUser = (userId) => {
+      setEditingUserId(userId);
+      // Найти пользователя с заданным ID и установить его данные для редактирования
+      const userToEdit = userList.find((user) => user.id === userId);
+      setEditingUserData(userToEdit);
+    };
 
     
       console.log('isLoading:', isLoading);
       console.log('error:', error);
       console.log('userList:', userList);
-      console.log('isValidating:', isValidating);
+     // console.log('isValidating:', isValidating);
 
       const sortBy = (prop) => {
         const sortedUsers = [...userList];
@@ -50,6 +82,7 @@ export default function UsersTable() {
         <table className={style.table}>
           <thead>
             <tr>
+              <th>ID</th>
               <th ><label onClick={() => { sortBy('name') }}>Name <br />(click for sort)</label></th>
               <th><label onClick={() => { sortBy('username') }}>Username <br />(click for sort)</label></th>
               <th>City</th>
@@ -61,6 +94,7 @@ export default function UsersTable() {
           </thead>
           <tbody>
 
+          
           {isLoading ? (
               <tr>
                 <td colSpan="7">Загрузка данных...</td>
@@ -72,6 +106,7 @@ export default function UsersTable() {
             ) : userList && userList.length > 0 ? (
               userList.map((user) => (
                 <tr key={user.id}>
+                  <td>{user.id}</td>
                   <td>{user.name}</td>
                   <td>{user.username}</td>
                   <td>{user.address?.city}</td>
